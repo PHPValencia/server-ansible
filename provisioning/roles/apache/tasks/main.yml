@@ -1,0 +1,16 @@
+# apache ya instalado con el servidor
+---
+- name: Set directory owner to Apache
+  tags:
+    - apache
+  file: dest=/var/www/ owner=www-data group=www-data recurse=yes
+
+- name: Enable modules
+  tags:
+    - apache
+  apache2_module: >
+    name={{ item }}
+    state=present
+  with_items:
+    - rewrite
+    - alias
