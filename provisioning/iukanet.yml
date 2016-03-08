@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  become: sudo
+  become: true
   tasks:
     - name: Change root password
       user:
@@ -33,7 +33,7 @@
         line="PasswordAuthentication no"
         state=present
       notify:
-      - restart sshd
+      - Restart ssh
 
     - name: Disallow SSH GSS API authentication
       lineinfile:
@@ -42,8 +42,8 @@
         line="GSSAPIAuthentication no"
         state=present
       notify:
-      - restart sshd
+      - Restart ssh
 
   handlers:
-  - name: restart sshd
-    action: service name=sshd state=restarted
+  - name: Restart ssh
+    action: service name=ssh state=restarted
