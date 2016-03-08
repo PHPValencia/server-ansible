@@ -1,0 +1,49 @@
+---
+- hosts: all
+  become: sudo
+  tasks:
+    - name: Change root password
+      user:
+        name=root
+        password={{ root_password }}
+
+    - name: Add PHPValencia user
+      user:
+        name={{ remote_user }}
+        password={{ remote_password }}
+
+    - name: Add SSH public key to user remote
+      tags:
+        rightnow
+      authorized_key:
+        user={{ remote_user }}
+        key="{{ lookup('file', {{ public_key_file }}) }}"
+
+    - name: Add user remote to sudoers
+      lineinfile:
+        "dest=/etc/sudoers
+        regexp='^remote ALL'
+        line='{{ remote_user }} ALL=(ALL) NOPASSWD: ALL'
+        state=present"
+
+    - name: Disallow SSH password authentication
+      lineinfile:
+        dest=/etc/ssh/sshd_config
+        regexp="^PasswordAuthentication"
+        line="PasswordAuthentication no"
+        state=present
+      notify:
+      - restart sshd
+
+    - name: Disallow SSH GSS API authentication
+      lineinfile:
+        dest=/etc/ssh/sshd_config
+        regexp="^GSSAPIAuthentication"
+        line="GSSAPIAuthentication no"
+        state=present
+      notify:
+      - restart sshd
+
+  handlers:
+  - name: restart sshd
+    action: service name=sshd state=restarted
