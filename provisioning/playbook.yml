@@ -12,5 +12,6 @@
     - base
     - apache
     - php
+    - bind
 
 

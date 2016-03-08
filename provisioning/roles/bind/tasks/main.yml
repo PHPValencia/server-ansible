@@ -1,0 +1,41 @@
+---
+- name: Install bind9
+  tags:
+    - bind
+  apt: >
+    name={{ item }}
+    state=present
+  with_items:
+    - bind9
+    - dnsutils
+
+- name: Copy configuration file
+  tags:
+    - bind
+  copy: >
+    src={{ item }}
+    dest="/etc/bind/{{ item }}"
+    owner=root
+    group=bind
+    mode=0644
+  with_items:
+    - named.conf.options
+    - named.conf.local
+  notify: Restart bind9
+
+- name: Create zone subdirectory
+  tags:
+    - bind
+  file: dest=/etc/bind/zones state=directory owner=root group=bind mode=2755
+
+- name: Copy zone file
+  tags:
+    - bind
+  copy: >
+    src=db.phpvalencia.es 
+    dest=/etc/bind/zones/db.phpvalencia.es
+    owner=root
+    group=bind
+    mode=0644
+  notify: Restart bind9
+

@@ -1,0 +1,6 @@
+zone "phpvalencia.es" {
+        type master;
+        file "/etc/bind/zones/db.phpvalencia.es";
+        allow-transfer { none; };
+        allow-query { any; };
+};
