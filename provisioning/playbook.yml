@@ -1,0 +1,8 @@
+---
+
+# disable login via ssh and ensure that connection is OK
+- hosts: all
+  become: true
+  roles:
+    - ssh
+
