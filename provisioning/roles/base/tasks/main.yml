@@ -1,0 +1,9 @@
+---
+- name: apt-get install
+  apt: >
+    name={{ item }}
+    state=present
+  with_items:
+    - bash
+    - vim
+    - git

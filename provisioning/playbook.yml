@@ -6,3 +6,8 @@
   roles:
     - ssh
 
+- hosts: all
+  become: true
+  roles:
+    - base
+
