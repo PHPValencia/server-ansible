@@ -1,0 +1,28 @@
+---
+
+- name: Copy virtual host file
+  copy: 
+    src=website.conf 
+    dest=/etc/apache2/sites-available/website.conf
+    force=yes
+    owner=root
+    group=root
+    mode=0644
+  notify: Restart apache
+
+- name: Symlink to sites-enabled
+  file: 
+    src=/etc/apache2/sites-available/website.conf 
+    dest=/etc/apache2/sites-enabled/000-website.conf 
+    state=link
+  notify: Restart apache
+
+- name: Create web directory
+  file:
+    path=/var/www/website
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=0755
+  notify:
+    - Restart apache

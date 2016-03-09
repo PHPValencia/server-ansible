@@ -14,4 +14,9 @@
     - php
     - bind
 
+- hosts: all
+  become: true
+  roles:
+    - website
+
 
