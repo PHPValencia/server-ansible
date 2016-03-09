@@ -1,0 +1,35 @@
+---
+- name: Add virtual host conf file for all listed hosts
+  template:
+    src=vhost.conf.j2
+    dest=/etc/apache2/sites-available/{{ item.site_name }}.conf
+    owner=root
+    group=root
+    mode=0644
+  with_items: '{{ apache_vhosts }}'
+  notify:
+    - Restart apache
+
+- name: Enable each configuration
+  file:
+    src=/etc/apache2/sites-available/{{ item.site_name }}.conf
+    dest=/etc/apache2/sites-enabled/001-{{ item.site_name }}.conf
+    state=link
+    owner=root
+    group=root
+    mode=0755
+  with_items:  '{{ apache_vhosts }}'
+  notify:
+    - Restart apache
+  
+- name: Create each web directory
+  file:
+    path={{ item.documentroot }}
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=0755
+  with_items:  '{{ apache_vhosts }}'
+  when: item.documentroot | default(false)
+  notify:
+    - Restart apache

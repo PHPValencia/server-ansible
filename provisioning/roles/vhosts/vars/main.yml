@@ -1,0 +1,15 @@
+---
+apache_vhosts:
+  - 
+    site_name: 'googlegroup'
+    server_name: 'google.phpvalencia.es'
+    server_alias: 'php.phpvalencia.es'
+    redirect: 'https://groups.google.com/forum/#!forum/php-valencia'
+  -
+    site_name: 'symfonygroup'
+    server_name: 'symfony.phpvalencia.es'
+    redirect: 'https://groups.google.com/forum/#!forum/symfony-vlc'
+  - 
+    site_name: 'api'
+    server_name: 'api.phpvalencia.es'
+    documentroot: '/var/www/api'

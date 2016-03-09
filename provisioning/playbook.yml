@@ -6,6 +6,7 @@
   roles:
     - ssh
 
+# setup base requirements
 - hosts: all
   become: true
   roles:
@@ -14,9 +15,12 @@
     - php
     - bind
 
+# enable all the web-filled goodness
 - hosts: all
   become: true
   roles:
     - website
+    - vhosts
+
 
 

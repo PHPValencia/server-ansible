@@ -1,0 +1,28 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@{{ item.server_name }}
+    ServerName {{ item.server_name }}
+{% if item.server_alias is defined %}
+    ServerAlias {{ item.server_alias }}
+{% endif %}
+
+{% if item.redirect is defined %}
+    Redirect / {{ item.redirect }}
+{% else %}
+    DocumentRoot {{ item.documentroot }}
+
+    <Directory {{ item.documentroot }}>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Order deny,allow
+        Allow from all
+        Require all granted
+    {% if item.extra_directives is defined %}
+        {{ item.extra_directives }}
+    {% endif %}
+    </Directory>
+{% endif %}
+
+    ErrorLog ${APACHE_LOG_DIR}/{{ item.site_name }}-error.log
+    CustomLog ${APACHE_LOG_DIR}/{{ item.site_name }}-access.log combined
+
+</VirtualHost>
